@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">IntechTest</string>
+    <string name="start">start</string>
+    <string name="pause">pause</string>
+    <string name="stop">stop</string>
+    <string name="description">artist</string>
+
+    <string-array name="items">
+        <item>таблица</item>
+        <item>список</item>
+    </string-array>
+
+    <string name="item1">таблица</string>
+    <string name="item2">список</string>
+
+</resources>

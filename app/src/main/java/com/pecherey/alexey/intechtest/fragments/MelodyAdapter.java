@@ -9,12 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.pecherey.alexey.intechtest.R;
 import com.pecherey.alexey.intechtest.activities.MusicElementsActivity;
 import com.pecherey.alexey.intechtest.logic.Constants;
 import com.pecherey.alexey.intechtest.logic.Melodies;
 import com.pecherey.alexey.intechtest.logic.Melody;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Алексей on 17.01.2016.
@@ -25,13 +25,13 @@ public class MelodyAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context mContext;
 
-    private MelodyAdapter(Context context) {
+    private MelodyAdapter() {
         mMelodiesArray = new Melodies();
     }
 
     public static MelodyAdapter getAdapter(Context context) {
         if (mInstance == null) {
-            mInstance = new MelodyAdapter(context);
+            mInstance = new MelodyAdapter();
         }
         return mInstance.init(context);
     }
@@ -87,7 +87,7 @@ public class MelodyAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.title)).setText(melody.getTitle());
 
         ImageView picture = (ImageView) view.findViewById(R.id.image);
-        Glide.with(mContext).load(melody.getPicUrl()).into(picture);
+        Picasso.with(mContext).load(melody.getPicUrl()).into(picture);
     }
 
     private boolean isEndChecked(int position) {

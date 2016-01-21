@@ -21,35 +21,31 @@ import com.pecherey.alexey.intechtest.logic.MelodyStorage;
  * Created by Алексей on 19.01.2016.
  */
 public class GridViewFragment extends Fragment implements onAdapterUpdateEvent {
-    public static final String RESOURCE_ID = "resourceId";
-    public static final String POSITION = "position";
+    private MelodyAdapter mAdapter;
+    private GridView mGridViewTable;
+    private int mSavedScrollPosition;
 
     public static GridViewFragment create(int resource) {
         GridViewFragment fragment = new GridViewFragment();
 
         Bundle args = new Bundle();
-        args.putInt(RESOURCE_ID, resource);
+        args.putInt(Constants.RESOURCE_ID, resource);
         fragment.setArguments(args);
 
         return fragment;
     }
 
-    private MelodyAdapter mAdapter;
-    private GridView mGridViewTable;
-
-    private int mSavedScrollPosition;
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mSavedScrollPosition = mGridViewTable.getFirstVisiblePosition();
-        outState.putInt(POSITION, mSavedScrollPosition);
+        outState.putInt(Constants.SaveInstance.POSITION, mSavedScrollPosition);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int resource = getArguments().getInt(RESOURCE_ID);
+        int resource = getArguments().getInt(Constants.RESOURCE_ID);
 
         View view = inflater.inflate(resource, null);
 
@@ -64,7 +60,7 @@ public class GridViewFragment extends Fragment implements onAdapterUpdateEvent {
 
     private void restoreScrollPosition(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            mSavedScrollPosition = savedInstanceState.getInt(POSITION);
+            mSavedScrollPosition = savedInstanceState.getInt(Constants.SaveInstance.POSITION);
         } else {
             mSavedScrollPosition = 0;
         }
@@ -97,8 +93,8 @@ public class GridViewFragment extends Fragment implements onAdapterUpdateEvent {
 
         private void startPlayer(Melody melody) {
             Intent play = new Intent(getActivity(), PlayerActivity.class)
-                    .putExtra(Constants.PIC_URL, melody.getPicUrl())
-                    .putExtra(Constants.DEMO_URL, melody.getDemoUrl());
+                    .putExtra(Constants.MelodyAttr.PIC_URL, melody.getPicUrl())
+                    .putExtra(Constants.MelodyAttr.DEMO_URL, melody.getDemoUrl());
             startActivity(play);
         }
     }

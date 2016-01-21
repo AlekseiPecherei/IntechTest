@@ -1,7 +1,7 @@
 package com.pecherey.alexey.intechtest.retrofit;
 
+import com.pecherey.alexey.intechtest.logic.Constants;
 import com.pecherey.alexey.intechtest.logic.Melodies;
-import com.pecherey.alexey.intechtest.sevices.DownloadService;
 
 import retrofit.Call;
 import retrofit.http.GET;
@@ -14,5 +14,5 @@ public interface ServiceApi {
     String URL = "https://api-content-beeline.intech-global.com/";
 
     @GET("public/marketplaces/1/tags/4/melodies")
-    Call<Melodies> getSongArray(@Query(DownloadService.LIMIT) int limit, @Query(DownloadService.FROM) int from);
+    Call<Melodies> getSongArray(@Query(Constants.PaginationArgs.LIMIT) int limit, @Query(Constants.PaginationArgs.FROM) int from);
 }

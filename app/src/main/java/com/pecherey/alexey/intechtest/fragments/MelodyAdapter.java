@@ -9,10 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.bumptech.glide.Glide;
 import com.pecherey.alexey.intechtest.R;
-import com.pecherey.alexey.intechtest.activities.MainActivity;
+import com.pecherey.alexey.intechtest.activities.MusicElementsActivity;
+import com.pecherey.alexey.intechtest.logic.Constants;
 import com.pecherey.alexey.intechtest.logic.Melodies;
 import com.pecherey.alexey.intechtest.logic.Melody;
 
@@ -20,13 +20,14 @@ import com.pecherey.alexey.intechtest.logic.Melody;
  * Created by Алексей on 17.01.2016.
  */
 public class MelodyAdapter extends BaseAdapter {
+    private static MelodyAdapter mInstance;
     private Melodies mMelodiesArray;
     private LayoutInflater mInflater;
-    private ImageLoader mLoader;
-
     private Context mContext;
 
-    private static MelodyAdapter mInstance;
+    private MelodyAdapter(Context context) {
+        mMelodiesArray = new Melodies();
+    }
 
     public static MelodyAdapter getAdapter(Context context) {
         if (mInstance == null) {
@@ -35,17 +36,9 @@ public class MelodyAdapter extends BaseAdapter {
         return mInstance.init(context);
     }
 
-    private MelodyAdapter(Context context) {
-        mMelodiesArray = new Melodies();
-    }
-
     private MelodyAdapter init(Context context) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
-
-        mLoader = ImageLoader.getInstance();
-        ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(context);
-        mLoader.init(config);
 
         return mInstance;
     }
@@ -94,7 +87,7 @@ public class MelodyAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.title)).setText(melody.getTitle());
 
         ImageView picture = (ImageView) view.findViewById(R.id.image);
-        mLoader.displayImage(melody.getPicUrl(), picture);
+        Glide.with(mContext).load(melody.getPicUrl()).into(picture);
     }
 
     private boolean isEndChecked(int position) {
@@ -102,7 +95,8 @@ public class MelodyAdapter extends BaseAdapter {
     }
 
     private void sendLoadDataBroadcast() {
-        Intent intent = new Intent(MainActivity.BROADCAST_ACTION).putExtra(MainActivity.STATUS, MainActivity.LOAD_MORE);
+        Intent intent = new Intent(MusicElementsActivity.BROADCAST_ACTION)
+                .putExtra(Constants.LoadStatus.getName(), Constants.LoadStatus.LOAD_MORE);
         mContext.sendBroadcast(intent);
     }
 }

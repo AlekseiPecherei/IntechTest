@@ -8,38 +8,29 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.bumptech.glide.Glide;
 import com.pecherey.alexey.intechtest.R;
 import com.pecherey.alexey.intechtest.logic.Constants;
 import com.pecherey.alexey.intechtest.sevices.PlayBackMusicService;
 
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-    public static final String PAUSE = "pause";
-    public static final String START = "start";
-    public static final String PLAYING = "playing";
-
-    private Button mStart, mPause, mStop;
+    public static final int SEEK_BAR_PROGRESS = 100;
+    public final static String MUSIC_SERVICE_BROADCAST_ACTION = PlayerActivity.class.getCanonicalName();
+    private Button mStart;
+    private Button mPause;
+    private Button mStop;
     private SeekBar mSeekBar;
     private ImageView mImageView;
-    private ImageLoader mLoader;
-
-    public final static String MUSIC_SERVICE_BROADCAST_ACTION = PlayerActivity.class.getCanonicalName();
+    private BroadcastReceiver mReceiver;
+    private boolean isPlaying;
 
     public static IntentFilter getIntentFilter() {
         return new IntentFilter(MUSIC_SERVICE_BROADCAST_ACTION);
     }
-
-    private BroadcastReceiver mReceiver;
-
-    private boolean isPlaying;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,35 +65,34 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void startAction() {
-        String url = getDataFromIntent(Constants.DEMO_URL);
-        startService(createMusicIntent(PlayBackMusicService.SET_URL)
-                .putExtra(Constants.DEMO_URL, url));
-        startService(createMusicIntent(PlayBackMusicService.START));
+        String url = getDataFromIntent(Constants.MelodyAttr.DEMO_URL);
+        startService(createMusicIntent(Constants.Player.SET_URL)
+                .putExtra(Constants.MelodyAttr.DEMO_URL, url));
+        startService(createMusicIntent(Constants.Player.START));
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(PAUSE, mPause.isEnabled());
-        outState.putBoolean(START, mStart.isEnabled());
-        outState.putBoolean(PLAYING, isPlaying);
+        outState.putBoolean(Constants.SaveInstance.PAUSE, mPause.isEnabled());
+        outState.putBoolean(Constants.SaveInstance.START, mStart.isEnabled());
+        outState.putBoolean(Constants.SaveInstance.PLAYING, isPlaying);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        boolean pause = savedInstanceState.getBoolean(PAUSE);
-        boolean start = savedInstanceState.getBoolean(START);
-        isPlaying = savedInstanceState.getBoolean(PLAYING);
+        boolean pause = savedInstanceState.getBoolean(Constants.SaveInstance.PAUSE);
+        boolean start = savedInstanceState.getBoolean(Constants.SaveInstance.START);
+        isPlaying = savedInstanceState.getBoolean(Constants.SaveInstance.PLAYING);
 
         controlButtonsEnable(start, pause);
     }
 
     private void initialUIComponents() {
-        String url = getDataFromIntent(Constants.PIC_URL);
-        mLoader = ImageLoader.getInstance();
+        String url = getDataFromIntent(Constants.MelodyAttr.PIC_URL);
         mImageView = (ImageView) findViewById(R.id.artist);
-        mLoader.displayImage(url, mImageView);
+        Glide.with(this).load(url).into(mImageView);
 
         mStart = (Button) findViewById(R.id.start);
         mPause = (Button) findViewById(R.id.pause);
@@ -113,7 +103,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
         mSeekBar = (SeekBar) findViewById(R.id.progress);
         mSeekBar.setOnSeekBarChangeListener(this);
-        mSeekBar.setMax(100);
+        mSeekBar.setMax(SEEK_BAR_PROGRESS);
 
         mReceiver = createBroadcastReceiver();
         IntentFilter filter = getIntentFilter();
@@ -135,8 +125,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void updateProgress(Intent intent) {
-        final double progress = intent.getDoubleExtra(PlayBackMusicService.PROGRESS, 0.0);
-        final int progressToShow = (int) (100.0 * progress);
+        /**
+         * progress received from service via intent has value of [0;1]
+         * we need myltiply this value by SEEK_BAR_PROGRESS constant value 100
+         */
+        final double progress = intent.getDoubleExtra(Constants.Player.PROGRESS, 0.0);
+        final int progressToShow = (int) (SEEK_BAR_PROGRESS * progress);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -146,7 +140,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void updateUiIfMusicFinish(Intent intent) {
-        if (intent.getBooleanExtra(PlayBackMusicService.FINISH, false)) {
+        if (intent.getBooleanExtra(Constants.Player.FINISH, false)) {
             uiShowPause();
         }
     }
@@ -171,11 +165,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 uiShowPlaying();
                 break;
             case R.id.pause:
-                startService(createMusicIntent(PlayBackMusicService.PAUSE));
+                startService(createMusicIntent(Constants.Player.PAUSE));
                 uiShowPause();
                 break;
             case R.id.stop:
-                startService(createMusicIntent(PlayBackMusicService.STOP));
+                startService(createMusicIntent(Constants.Player.STOP));
                 uiShowPause();
                 break;
         }
@@ -196,13 +190,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private Intent createMusicIntent(int state) {
         return new Intent(this, PlayBackMusicService.class)
-                .putExtra(PlayBackMusicService.STATE, state);
+                .putExtra(Constants.Player.STATE, state);
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser)
-            startService(createMusicIntent(PlayBackMusicService.SEEK_TO).putExtra(PlayBackMusicService.SEEK, progress));
+            startService(createMusicIntent(Constants.Player.SEEK_TO).putExtra(Constants.Player.SEEK, progress));
 
     }
 

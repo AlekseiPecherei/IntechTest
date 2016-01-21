@@ -35,10 +35,10 @@ public class MelodyDeserializer implements JsonDeserializer<Melodies> {
         for (JsonElement element : array) {
             JsonObject melodyObject = element.getAsJsonObject();
 
-            String artist = getValue(melodyObject, Constants.ARTIST);
-            String title = getValue(melodyObject, Constants.TITLE);
-            String picUrl = getValue(melodyObject, Constants.PIC_URL);
-            String demoUrl = getValue(melodyObject, Constants.DEMO_URL);
+            String artist = getValue(melodyObject, Constants.MelodyAttr.ARTIST);
+            String title = getValue(melodyObject, Constants.MelodyAttr.TITLE);
+            String picUrl = getValue(melodyObject, Constants.MelodyAttr.PIC_URL);
+            String demoUrl = getValue(melodyObject, Constants.MelodyAttr.DEMO_URL);
 
             Melody melody = Melodies.create(artist, title, demoUrl, picUrl);
             melodies.add(melody);

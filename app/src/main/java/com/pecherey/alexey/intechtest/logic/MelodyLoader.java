@@ -13,9 +13,10 @@ public class MelodyLoader {
     private static MelodyLoader ourInstance = new MelodyLoader();
     private static Context mContext;
     private static boolean isFirstStart = true;
-    private static int FIRST_LOAD = 20;
+    private static int FIRST_LOAD = 19;
     private static int NEXT = 6;
     private static int FROM = 0;
+
     private MelodyLoader() {
     }
 

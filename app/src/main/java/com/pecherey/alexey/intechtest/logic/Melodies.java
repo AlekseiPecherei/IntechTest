@@ -12,9 +12,7 @@ public class Melodies extends ArrayList<Melody> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends Melody> collection) {
-        synchronized (this) {
-            return super.addAll(collection);
-        }
+    public synchronized boolean addAll(Collection<? extends Melody> collection) {
+        return super.addAll(collection);
     }
 }

@@ -27,10 +27,8 @@ public class PlayBackMusicService extends Service implements
         int state = intent.getIntExtra(Constants.Player.STATE, 0);
 
         switch (state) {
-            case Constants.Player.SET_URL:
+            case Constants.Player.SET_URL_AND_START_PLAY:
                 setUrlFromIntent(intent);
-                break;
-            case Constants.Player.START:
                 startPlaying();
                 break;
             case Constants.Player.PAUSE:

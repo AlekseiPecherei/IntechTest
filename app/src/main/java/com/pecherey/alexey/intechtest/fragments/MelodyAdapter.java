@@ -25,22 +25,13 @@ public class MelodyAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context mContext;
 
-    private MelodyAdapter() {
+    public MelodyAdapter() {
         mMelodiesArray = new Melodies();
     }
 
-    public static MelodyAdapter getAdapter(Context context) {
-        if (mInstance == null) {
-            mInstance = new MelodyAdapter();
-        }
-        return mInstance.init(context);
-    }
-
-    private MelodyAdapter init(Context context) {
+    public void updateContext(Context context) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
-
-        return mInstance;
     }
 
     public void addMelodies(Melodies data) {

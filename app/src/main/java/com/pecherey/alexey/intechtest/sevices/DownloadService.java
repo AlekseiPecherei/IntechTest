@@ -18,6 +18,11 @@ import retrofit.Retrofit;
 public class DownloadService extends Service implements Callback<Melodies> {
     private final static String LOG_TAG = DownloadService.class.getSimpleName();
 
+    private static MelodyAdapter mAdapter = new MelodyAdapter();
+    public static MelodyAdapter getAdapter() {
+        return mAdapter;
+    }
+
     private RetrofitLogic mLogic;
 
     public DownloadService() {
@@ -49,7 +54,8 @@ public class DownloadService extends Service implements Callback<Melodies> {
     @Override
     public void onResponse(Response<Melodies> response, Retrofit retrofit) {
         Melodies array = response.body();
-        MelodyAdapter.getAdapter(getApplicationContext()).addMelodies(array);
+        mAdapter.updateContext(getApplicationContext());
+        mAdapter.addMelodies(array);
 
         Log.d(LOG_TAG, "response return " + array.size() + " elements");
         Log.d(LOG_TAG, "add all elements to adapter, dataSetChanged()");
@@ -61,6 +67,5 @@ public class DownloadService extends Service implements Callback<Melodies> {
     public void onFailure(Throwable t) {
         Log.e(LOG_TAG, "failture: " + t.getMessage());
         sendBroadcast(prepareStatusIntent(Constants.LoadStatus.LOAD_ERROR));
-        stopSelf();
     }
 }

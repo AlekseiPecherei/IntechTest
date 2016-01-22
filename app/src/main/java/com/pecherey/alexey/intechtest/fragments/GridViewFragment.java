@@ -14,6 +14,7 @@ import com.pecherey.alexey.intechtest.R;
 import com.pecherey.alexey.intechtest.activities.PlayerActivity;
 import com.pecherey.alexey.intechtest.logic.Constants;
 import com.pecherey.alexey.intechtest.logic.Melody;
+import com.pecherey.alexey.intechtest.sevices.DownloadService;
 
 /**
  * Created by Алексей on 19.01.2016.
@@ -47,9 +48,10 @@ public class GridViewFragment extends Fragment {
 
         View view = inflater.inflate(resource, null);
 
-        mAdapter = MelodyAdapter.getAdapter(getActivity());
+        mAdapter = DownloadService.getAdapter();
         mGridViewTable = (GridView) view.findViewById(R.id.gridView);
         mGridViewTable.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
         restoreScrollPosition(savedInstanceState);
         mGridViewTable.setOnItemClickListener(new ItemClickListener());
 

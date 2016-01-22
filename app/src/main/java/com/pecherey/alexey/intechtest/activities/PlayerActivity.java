@@ -71,9 +71,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private void startAction() {
         String url = getDataFromIntent(Constants.MelodyAttr.DEMO_URL);
-        startService(createMusicIntent(Constants.Player.SET_URL)
+        startService(createMusicIntent(Constants.Player.SET_URL_AND_START_PLAY)
                 .putExtra(Constants.MelodyAttr.DEMO_URL, url));
-        startService(createMusicIntent(Constants.Player.START));
     }
 
     @Override

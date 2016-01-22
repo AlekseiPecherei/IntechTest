@@ -67,7 +67,7 @@ public class MusicElementsActivity extends AppCompatActivity {
                     case Constants.LoadStatus.LOAD_MORE:
                         Log.e(LOG_TAG, "receive load request");
                         mProgressBar.setVisibility(View.VISIBLE);
-                        MelodyLoader.getInstance(getApplicationContext()).load();
+                        MelodyLoader.getInstance().load(MusicElementsActivity.this);
                         break;
                     case Constants.LoadStatus.LOAD_ERROR:
                         mProgressBar.setVisibility(View.GONE);
@@ -112,13 +112,14 @@ public class MusicElementsActivity extends AppCompatActivity {
 
     private void sendInitialLoadRequest(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            MelodyLoader.getInstance(this).load();
+            MelodyLoader.getInstance().load(this);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        MelodyLoader.getInstance().stop(this);
         unregisterReceiver(mReceiver);
     }
 }

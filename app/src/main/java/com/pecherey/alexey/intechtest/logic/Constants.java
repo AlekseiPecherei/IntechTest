@@ -51,10 +51,9 @@ public class Constants {
         public static final String FINISH = "finish";
         public static final String STATE = "state";
 
-        public static final int START = 1;
-        public static final int PAUSE = 2;
-        public static final int STOP = 3;
-        public static final int SEEK_TO = 4;
-        public static final int SET_URL = 5;
+        public static final int PAUSE = 1;
+        public static final int STOP = 2;
+        public static final int SEEK_TO = 3;
+        public static final int SET_URL_AND_START_PLAY = 4;
     }
 }

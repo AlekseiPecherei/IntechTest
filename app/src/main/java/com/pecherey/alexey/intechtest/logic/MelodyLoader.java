@@ -11,7 +11,6 @@ import com.pecherey.alexey.intechtest.sevices.DownloadService;
  */
 public class MelodyLoader {
     private static MelodyLoader ourInstance = new MelodyLoader();
-    private static Context mContext;
     private static boolean isFirstStart = true;
     private static int FIRST_LOAD = 19;
     private static int NEXT = 6;
@@ -20,27 +19,30 @@ public class MelodyLoader {
     private MelodyLoader() {
     }
 
-    public static MelodyLoader getInstance(Context context) {
-        mContext = context;
+    public static MelodyLoader getInstance() {
         return ourInstance;
     }
 
-    public void load() {
+    public void load(Context context) {
         if (isFirstStart) {
-            load(FIRST_LOAD, FROM);
+            load(context, FIRST_LOAD, FROM);
             FROM = FIRST_LOAD + 1;
             isFirstStart = false;
         } else {
-            load(NEXT, FROM);
+            load(context, NEXT, FROM);
             FROM = FROM + NEXT + 1;
         }
     }
 
-    private void load(int limit, int from) {
+    public void stop(Context context) {
+        context.stopService(new Intent(context, DownloadService.class));
+    }
+
+    private void load(Context context, int limit, int from) {
         Log.e("MusicElementsActivity", "limit = " + limit + "; from = " + from);
-        Intent loadService = new Intent(mContext, DownloadService.class);
+        Intent loadService = new Intent(context, DownloadService.class);
         loadService.putExtra(Constants.PaginationArgs.LIMIT, limit)
                 .putExtra(Constants.PaginationArgs.FROM, from);
-        mContext.startService(loadService);
+        context.startService(loadService);
     }
 }

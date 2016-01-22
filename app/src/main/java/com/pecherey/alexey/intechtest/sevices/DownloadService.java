@@ -6,9 +6,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.pecherey.alexey.intechtest.activities.MusicElementsActivity;
+import com.pecherey.alexey.intechtest.fragments.MelodyAdapter;
 import com.pecherey.alexey.intechtest.logic.Constants;
 import com.pecherey.alexey.intechtest.logic.Melodies;
-import com.pecherey.alexey.intechtest.logic.MelodyStorage;
 import com.pecherey.alexey.intechtest.retrofit.RetrofitLogic;
 
 import retrofit.Callback;
@@ -49,7 +49,7 @@ public class DownloadService extends Service implements Callback<Melodies> {
     @Override
     public void onResponse(Response<Melodies> response, Retrofit retrofit) {
         Melodies array = response.body();
-        MelodyStorage.getInstance().setMelodies(array);
+        MelodyAdapter.getAdapter(getApplicationContext()).addMelodies(array);
 
         Log.d(LOG_TAG, "response return " + array.size() + " elements");
         Log.d(LOG_TAG, "add all elements to adapter, dataSetChanged()");

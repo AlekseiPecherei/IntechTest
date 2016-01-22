@@ -44,11 +44,8 @@ public class MelodyAdapter extends BaseAdapter {
     }
 
     public void addMelodies(Melodies data) {
-        if (data != null) {
-            mMelodiesArray.clear();
-            mMelodiesArray.addAll(data);
-            notifyDataSetChanged();
-        }
+        mMelodiesArray.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override

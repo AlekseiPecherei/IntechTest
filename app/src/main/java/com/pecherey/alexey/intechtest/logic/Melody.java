@@ -3,7 +3,7 @@ package com.pecherey.alexey.intechtest.logic;
 /**
  * Created by Алексей on 15.01.2016.
  */
-public class Melody {
+public final class Melody {
     private String picUrl;
     private String demoUrl;
     private String title;
@@ -20,31 +20,15 @@ public class Melody {
         return demoUrl;
     }
 
-    public void setDemoUrl(String demoUrl) {
-        this.demoUrl = demoUrl;
-    }
-
     public String getPicUrl() {
         return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getArtist() {
         return artist;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
     }
 }

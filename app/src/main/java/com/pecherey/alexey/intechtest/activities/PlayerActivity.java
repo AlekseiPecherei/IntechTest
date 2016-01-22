@@ -12,20 +12,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
-import com.bumptech.glide.Glide;
 import com.pecherey.alexey.intechtest.R;
 import com.pecherey.alexey.intechtest.logic.Constants;
 import com.pecherey.alexey.intechtest.sevices.PlayBackMusicService;
+import com.squareup.picasso.Picasso;
 
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-    public static final int SEEK_BAR_PROGRESS = 100;
+    public final static int SEEK_BAR_PROGRESS = 100;
     public final static String MUSIC_SERVICE_BROADCAST_ACTION = PlayerActivity.class.getCanonicalName();
+
     private Button mStart;
     private Button mPause;
     private Button mStop;
     private SeekBar mSeekBar;
     private ImageView mImageView;
+
     private BroadcastReceiver mReceiver;
+    /**
+     * isPlaying variable initialize when onRestoreInstanceState() call
+     */
     private boolean isPlaying;
 
     public static IntentFilter getIntentFilter() {
@@ -92,7 +97,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private void initialUIComponents() {
         String url = getDataFromIntent(Constants.MelodyAttr.PIC_URL);
         mImageView = (ImageView) findViewById(R.id.artist);
-        Glide.with(this).load(url).into(mImageView);
+        Picasso.with(this).load(url).into(mImageView);
 
         mStart = (Button) findViewById(R.id.start);
         mPause = (Button) findViewById(R.id.pause);

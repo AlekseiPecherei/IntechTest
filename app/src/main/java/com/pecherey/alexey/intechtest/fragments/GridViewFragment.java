@@ -13,14 +13,12 @@ import android.widget.GridView;
 import com.pecherey.alexey.intechtest.R;
 import com.pecherey.alexey.intechtest.activities.PlayerActivity;
 import com.pecherey.alexey.intechtest.logic.Constants;
-import com.pecherey.alexey.intechtest.logic.Melodies;
 import com.pecherey.alexey.intechtest.logic.Melody;
-import com.pecherey.alexey.intechtest.logic.MelodyStorage;
 
 /**
  * Created by Алексей on 19.01.2016.
  */
-public class GridViewFragment extends Fragment implements onAdapterUpdateEvent {
+public class GridViewFragment extends Fragment {
     private MelodyAdapter mAdapter;
     private GridView mGridViewTable;
     private int mSavedScrollPosition;
@@ -65,22 +63,6 @@ public class GridViewFragment extends Fragment implements onAdapterUpdateEvent {
             mSavedScrollPosition = 0;
         }
         mGridViewTable.setSelection(mSavedScrollPosition);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        onUpdate();
-    }
-
-    /**
-     * onAdapterUpdateEvent interface
-     */
-    @Override
-    public void onUpdate() {
-        mAdapter = MelodyAdapter.getAdapter(getActivity());
-        Melodies array = MelodyStorage.getInstance().getMelodies();
-        mAdapter.addMelodies(array);
     }
 
     private class ItemClickListener implements AdapterView.OnItemClickListener {

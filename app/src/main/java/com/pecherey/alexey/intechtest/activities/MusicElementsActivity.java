@@ -1,6 +1,5 @@
 package com.pecherey.alexey.intechtest.activities;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,17 +17,18 @@ import android.widget.Spinner;
 
 import com.pecherey.alexey.intechtest.R;
 import com.pecherey.alexey.intechtest.fragments.GridViewFragment;
-import com.pecherey.alexey.intechtest.fragments.onAdapterUpdateEvent;
 import com.pecherey.alexey.intechtest.logic.Constants;
 import com.pecherey.alexey.intechtest.logic.MelodyLoader;
 
 public class MusicElementsActivity extends AppCompatActivity {
     public final static String BROADCAST_ACTION = MusicElementsActivity.class.getCanonicalName();
     private final static String LOG_TAG = MusicElementsActivity.class.getSimpleName();
+
     private static GridViewFragment melodiesTableFragment
             = GridViewFragment.create(R.layout.table_fragment);
     private static GridViewFragment melodiesListFragment
             = GridViewFragment.create(R.layout.list_fragment);
+
     private BroadcastReceiver mReceiver;
     private ProgressBar mProgressBar;
 
@@ -63,7 +63,6 @@ public class MusicElementsActivity extends AppCompatActivity {
                     case Constants.LoadStatus.LOAD_FINISH:
                         Log.e(LOG_TAG, "finish loading");
                         mProgressBar.setVisibility(View.GONE);
-                        updateCurrentFragment();
                         break;
                     case Constants.LoadStatus.LOAD_MORE:
                         Log.e(LOG_TAG, "receive load request");
@@ -115,12 +114,6 @@ public class MusicElementsActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             MelodyLoader.getInstance(this).load();
         }
-    }
-
-    private void updateCurrentFragment() {
-        Fragment current = getFragmentManager().findFragmentById(R.id.fragment);
-        if (current != null)
-            ((onAdapterUpdateEvent) current).onUpdate();
     }
 
     @Override
